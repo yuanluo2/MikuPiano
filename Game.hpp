@@ -130,7 +130,8 @@ namespace mikuPiano {
 		}
 	public:
 		Game() :
-			window{ sf::VideoMode{ mikuPiano::config::WINDOW_WIDTH, mikuPiano::config::WINDOW_HEIGHT }, mikuPiano::config::WINDOW_TITLE },
+			// make the window not resizable.
+			window{ sf::VideoMode{ mikuPiano::config::WINDOW_WIDTH, mikuPiano::config::WINDOW_HEIGHT }, mikuPiano::config::WINDOW_TITLE, sf::Style::Titlebar | sf::Style::Close },
 			font{}
 		{
 			if (!font.loadFromFile(config::PIANO_FONT_FILE_PATH)) {
