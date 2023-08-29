@@ -8,7 +8,6 @@
 #include <vector>
 #include <array>
 #include <map>
-#include <deque>
 #include <functional>
 #include "PianoKey.hpp"
 #include "Config.hpp"
@@ -18,7 +17,6 @@ namespace mikuPiano {
 		std::vector<std::reference_wrapper<PianoKey>> blackKeyShapes;
 		std::vector<std::reference_wrapper<PianoKey>> whiteKeyShapes;
 		std::map<sf::Keyboard::Key, PianoKey> keyMap;
-		std::deque<sf::Keyboard::Key> pressedKeys;
 		sf::RenderWindow window;
 		sf::Font font;
 
@@ -106,15 +104,13 @@ namespace mikuPiano {
 					auto iter = keyMap.find(event.key.code);
 					if (iter != keyMap.cend()) {
 						iter->second.play();
-						pressedKeys.push_back(event.key.code);
 						iter->second.setColor(config::HATSUNE_MIKU_COLOR);
 					}
 				}
 				else if (event.type == sf::Event::KeyReleased){
-					while (!pressedKeys.empty()) {
-						auto& key = pressedKeys.front();
-						keyMap.at(key).resetColor();
-						pressedKeys.pop_front();
+					auto iter = keyMap.find(event.key.code);
+					if (iter != keyMap.cend()) {
+						iter->second.resetColor();
 					}
 				}
 			}
@@ -130,7 +126,6 @@ namespace mikuPiano {
 		}
 	public:
 		Game() :
-			// make the window not resizable.
 			window{ sf::VideoMode{ mikuPiano::config::WINDOW_WIDTH, mikuPiano::config::WINDOW_HEIGHT }, mikuPiano::config::WINDOW_TITLE, sf::Style::Titlebar | sf::Style::Close },
 			font{}
 		{
